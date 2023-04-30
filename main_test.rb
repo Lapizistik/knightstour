@@ -51,11 +51,3 @@ class TestChessBoard < Minitest::Test
 
   end
 end
-
-
-__END__
-  1  6 17 12 23
- 18 11 22  7 16
-  5  2 13 24 21
- 10 19  4 15  8
-  3 14  9 20 25

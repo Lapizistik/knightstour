@@ -56,20 +56,23 @@ class Runner
   def initialize(board: ChessBoard.new)
     @board = board
   end
-  def run(pos: Vector[0,0], k: 1)
+  def run(pos: Vector[0,0], k: 1, moves: @board.possible_moves(pos))
     # First we tell the chessboard that we are here:
     @board[pos] = k
 
     return @board if k >= @board.size # found it!
-    moves = @board.possible_moves(pos)
-    moves.each do |p| 
-      if result = run(pos: p, k: k + 1)
-        return result
+
+    # so lets decide the next step
+    moves.map { |p| [p, @board.possible_moves(p)] }.sort_by { |p, ms| ms.length }
+      .each do |p, ms| 
+        if result = run(pos: p, k: k + 1, moves: ms)
+          return result
+        end
       end
-    end
     @board[pos] = 0
     return false
   end
 end
 
-puts Runner.new(board: ChessBoard.new(n: 6)).run
+#puts Runner.new(board: ChessBoard.new(n: 8)).run
+puts Runner.new.run
