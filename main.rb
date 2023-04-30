@@ -28,6 +28,10 @@ class ChessBoard
     @moves.map { |p| pos + p }.select { |p| valid?(p) }
   end
 
+  def adjacent?(pos, value=1)
+    @moves.map { |p| pos + p }.any? { |p| p[0] >= 0 && p[1] >= 0 && @data[*p] == value }
+  end
+
   # is the given position a valid move?
   def valid?(pos)
     pos[0] >= 0 && pos[1] >= 0 && @data[*pos] == 0
@@ -53,6 +57,8 @@ class ChessBoard
 end # class
 
 class Runner
+  # we can run on arbitrary chess boards and can
+  # also try to create a roundtrip
   def initialize(board: ChessBoard.new, roundtrip: false)
     @board = board
     @roundtrip = roundtrip
@@ -63,7 +69,7 @@ class Runner
     @board[pos] = k
 
     return @board if (k >= @board.size) &&
-                     !@roundtrip || moves.any? { |p| @board[p] == 1 }
+                     (!@roundtrip || @board.adjacent?(pos, 1))
 
     # so lets decide the next step
     moves.map { |p| [p, @board.possible_moves(p)] }.sort_by { |_p, ms| ms.length }
