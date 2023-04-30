@@ -17,8 +17,45 @@ class TestChessBoard < Minitest::Test
     assert_equal board[v], 5
   end
 
+  # does our visualization work as expected?
+  def test_board_display
+    board = ChessBoard.new(2)
+    board[Vector[0,0]] = 1
+    board[Vector[0,1]] = 2
+    board[Vector[1,0]] = 3
+    assert_equal board.to_s, "  1  2\n  3  0"
+  end
+
+  def test_knight_moves
+    assert_equal [Vector[-2, -1], Vector[-2, 1], 
+                  Vector[-1, -2], Vector[-1, 2], 
+                  Vector[1, -2], Vector[1, 2], 
+                  Vector[2, -1], Vector[2, 1]],
+                 ChessBoard.new.compute_knight_moves(Vector[2,1]).sort_by(&:to_a)
+  end
+  
   def test_valid_moves
     board = ChessBoard.new 
-    
+    assert board.valid?(Vector[1,1])
+    refute board.valid?(Vector[-1,1])
+    refute board.valid?(Vector[1,8])
+    assert_equal [Vector[1,2], Vector[2,1]], 
+                 board.possible_moves(Vector[0,0]).sort_by(&:to_a)
+    assert_equal [Vector[2, 3], Vector[2, 5], Vector[3, 2], Vector[3, 6], 
+                  Vector[5, 2], Vector[5, 6], Vector[6, 3], Vector[6, 5]],
+                 board.possible_moves(Vector[4,4]).sort_by(&:to_a)
+    assert_equal [Vector[5,6], Vector[6,5]], 
+                 board.possible_moves(Vector[7,7]).sort_by(&:to_a)
+    assert_equal [Vector[1,5], Vector[2,6]], 
+                 board.possible_moves(Vector[0,7]).sort_by(&:to_a)
+
   end
 end
+
+
+__END__
+  1  6 17 12 23
+ 18 11 22  7 16
+  5  2 13 24 21
+ 10 19  4 15  8
+  3 14  9 20 25

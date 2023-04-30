@@ -43,7 +43,7 @@ end
 # here we call this method with our board
 # by calling create_board
 board = create_board(5) # min board size is 5x5!
-run_knight(1, 1, board)
+run_knight(0, 0, board)
 
 # ok DFS without strategy takes too long
 
