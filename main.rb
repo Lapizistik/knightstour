@@ -6,6 +6,7 @@ class ChessBoard
     @data = Matrix.zero(n, m)
     @moves = compute_knight_moves(v)
     @size = n * m
+    @cell_width = @size.digits.length + 1
   end
 
   # get the content of a specific board cell
@@ -38,7 +39,7 @@ class ChessBoard
   end
 
   # give a nice string representation of a board
-  def to_s(cell_width = 3)
+  def to_s(cell_width = @cell_width)
     @data.row_vectors.map do |v| # '|' ?
       v.to_a.map { |x| x.to_s.rjust(cell_width) }.join
     end.join("\n")
@@ -83,5 +84,19 @@ class Runner
   end
 end
 
-# puts Runner.new(board: ChessBoard.new(n: 8)).run
-puts Runner.new(roundtrip: true).run
+def example(n: 8, roundtrip: false)
+  print "→ #{n}×#{n}"
+  if roundtrip
+    puts ' with roundtrip'
+  else
+    puts
+  end
+  puts Runner.new(board: ChessBoard.new(n: n), roundtrip: roundtrip).run
+end
+
+puts
+example(n: 8, roundtrip: true)
+puts
+(9..20).each do |i|
+  example(n: i)
+end 
